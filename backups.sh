@@ -9,7 +9,7 @@ MYDATE=`date +%d-%B-%Y`
 MONTH=$(date +%B)
 YEAR=$(date +%Y)
 MYBASEDIR=/backups
-MYBACKUPDIR=${MYBASEDIR}/${YEAR}/${MONTH}
+MYBACKUPDIR=${MYBASEDIR}
 mkdir -p ${MYBACKUPDIR}
 cd ${MYBACKUPDIR}
 
@@ -37,3 +37,6 @@ do
   fi
   pg_dump -Fc -f ${FILENAME}  ${DB}
 done
+
+# delete files that are older then the declared time span
+find ${MYBACKUPDIR} -mtime +${MAX_TIME_SPAN_BACKUPS} -type f -delete
