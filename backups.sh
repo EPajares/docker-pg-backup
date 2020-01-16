@@ -24,9 +24,9 @@ for DB in ${DBLIST}
 do
   echo "Backing up $DB"  >> /var/log/cron.log
   if [ -z "${ARCHIVE_FILENAME:-}" ]; then
-  	FILENAME=${MYBACKUPDIR}/${DUMPPREFIX}_${DB}.${MYDATE}.dmp
+  	FILENAME=${MYBACKUPDIR}/${DUMPPREFIX}_${DB}.${MYDATE}.sql
   else
-  	FILENAME="${ARCHIVE_FILENAME}.${DB}.dmp"
+  	FILENAME="${ARCHIVE_FILENAME}.${DB}.sql"
   fi
   if [[  -f ${MYBASEDIR}/globals.sql ]]; then
         rm ${MYBASEDIR}/globals.sql
@@ -35,7 +35,7 @@ do
         echo "Dump users and permisions"
         pg_dumpall  --globals-only -f ${MYBASEDIR}/globals.sql
   fi
-  pg_dump -Fc -f ${FILENAME}  ${DB}
+  pg_dump -Fp -f ${FILENAME}  ${DB}
 done
 
 # delete files that are older then the declared time span
